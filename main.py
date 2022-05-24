@@ -37,15 +37,19 @@ def main():
             create_data(formatted_data)
 
         data_from_db = read_data()
-        data_changes = set(formatted_data).difference(set(data_from_db))
+        data_for_add = set(formatted_data).difference(set(data_from_db))
         data_for_del = set(data_from_db).difference(set(formatted_data))
 
-        if data_changes:
-            create_data(data_changes)
-        elif data_for_del:
+        if data_for_add and (len(formatted_data) == len(data_from_db)):
+            update_data(data_from_db, formatted_data)
+        if data_for_add and len(formatted_data) > len(data_from_db):
+            create_data(data_for_add)
+            update_data(data_from_db, formatted_data)
+        if data_for_del and len(formatted_data) < len(data_from_db):
             delete_data(data_for_del)
+
+        time.sleep(5)
 
 
 if __name__ == '__main__':
     main()
-    time.sleep(20)

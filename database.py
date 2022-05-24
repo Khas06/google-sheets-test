@@ -33,7 +33,7 @@ def create_data(conn, data):
                                 order_num VARCHAR(20),
                                 price_$ INTEGER,
                                 delivery_time VARCHAR,
-                                price_in_rub DECIMAL(8, 2))'''
+                                price_in_rub DECIMAL(10, 2))'''
                    )
 
     cursor.executemany('''INSERT INTO test_sheets VALUES(%s, %s, %s, %s, %s)''', data)
@@ -55,11 +55,11 @@ def read_data(conn):
 def update_data(conn, source_data, new_data):
     cursor = conn.cursor()
     source_data = sorted(source_data, key=lambda x: int(x[0]))
-    new_data = sorted(source_data, key=lambda x: int(x[0]))
+    new_data = sorted(new_data, key=lambda x: int(x[0]))
     for el1, el2 in zip(new_data, source_data):
         cursor.execute(""" UPDATE test_sheets
                            SET № = %s, order_num = %s, price_$ = %s, delivery_time = %s, price_in_rub = %s
-                           WHERE № = %s and order_num = %s """, (*el1, *el2[:2]))
+                           WHERE № = %s""", (*el1, *el2[:1]))
 
 
 @conn_decorator
